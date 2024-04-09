@@ -19,5 +19,7 @@
         public int Pee_Time { get; set; }
 
         public bool Checked { get; set; }
+
+        public string Image {  get; set; } = string.Empty;
     }
 }

@@ -19,6 +19,8 @@ namespace FinalProject.Data
 
         public void DeleteFilm(Film film);
 
+        public void InsertImage(Film film);
+
 
 
     }

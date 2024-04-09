@@ -87,5 +87,11 @@ namespace FinalProject.Data
             _conn.Execute("DELETE FROM FILMS WHERE ID = @id;", new { id = film.ID });
             
         }
+
+        public void InsertImage(Film film)
+        {
+            _conn.Execute("UPDATE FILMS SET IMAGE = @image WHERE ID = @id;",
+                new { image = film.Image, id = film.ID });
+        }
     }
 }

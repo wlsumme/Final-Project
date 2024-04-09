@@ -16,6 +16,7 @@
         <th>Runtime</th>
         <th>Pee_Time</th>
         <th>Checked</th>
+        <th>Image</th>
     </tr>
 
     @foreach (var film in @Model)
@@ -30,5 +31,6 @@
             <td>@film.Runtime</td>
             <td>@film.Pee_Time</td>
             <td>@film.Checked</td>
+            <td><img src="@film.Image" alt="@film.Title" width="100" /></td>
         </tr>
     }

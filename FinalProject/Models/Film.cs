@@ -21,7 +21,9 @@
 
         public bool Checked { get; set; }
 
-        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<Category>? Categories { get; set; }
+
+        public string Image { get; set; } = string.Empty;
 
 
     }
