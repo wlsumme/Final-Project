@@ -20,47 +20,60 @@ namespace FinalProject.Controllers
 
         public IActionResult UploadButtonClick(IFormFile files, Film film)
         {
-            if (files.Length != null)
+            if (files == null || files.Length == 0 || film == null)
             {
-                if (files.Length > 0)
+              
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                var fileName = Path.GetFileName(files.FileName);
+                var fileExtension = Path.GetExtension(fileName);
+
+                
+                if (!IsImageFile(fileExtension))
                 {
-
-
-                    var fileName = Path.GetFileName(files.FileName);
-
-                    var uniqueFileName = Convert.ToString(Guid.NewGuid());
-
-                    var fileExtension = Path.GetExtension(fileName);
-
-                    var newFileName = String.Concat(uniqueFileName, fileExtension);
-
-                    var filepath = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image")).Root + $@"{newFileName}";
-
-                    using (FileStream fs = System.IO.File.Create(filepath))
-                    {
-                        files.CopyTo(fs);
-                        fs.Flush();
-                    }
-
-                    film.Image = "/images/" + newFileName;
-
-                    _repo.InsertImage(film);
-
+                   
+                    return RedirectToAction("Index");
                 }
 
+                var uniqueFileName = Guid.NewGuid().ToString();
+                var newFileName = $"{uniqueFileName}{fileExtension}";
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
+
+                using (var fs = new FileStream(filePath, FileMode.Create))
+                {
+                    files.CopyTo(fs);
+                    fs.Flush();
+                }
+
+                film.Image = "/images/" + newFileName;
+                _repo.InsertImage(film);
+            }
+            catch (Exception ex)
+            {
+               
+                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Index");
         }
 
-            
-    
-        
-            
-            
-            
-            
-            public IActionResult Index()
+        private bool IsImageFile(string fileExtension)
+        {
+            // Add more extensions if needed
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            return allowedExtensions.Contains(fileExtension.ToLower());
+        }
+
+
+
+
+
+
+        public IActionResult Index()
         {
             var films = _repo.GetAllFilms();
             return View(films);
